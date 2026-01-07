@@ -23,7 +23,6 @@
         min-height: 100vh;
         margin: 0;
         padding: 15px;
-        /* Prevents pull-to-refresh on mobile Chrome */
         overscroll-behavior-y: contain; 
     }
 
@@ -37,7 +36,6 @@
         text-align: center;
         color: var(--text-main);
         position: relative;
-        box-sizing: border-box;
     }
 
     .menu-title {
@@ -48,9 +46,9 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-transform: uppercase;
+        font-variant: small-caps; /* Smallcaps for Title */
     }
 
-    /* --- MOBILE OPTIMIZED BUTTONS --- */
     .btn-group {
         display: flex;
         flex-direction: column;
@@ -63,15 +61,14 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 64px; /* Larger touch target for thumbs */
+        height: 64px;
         border-radius: 20px;
         font-size: 16px;
         font-weight: 800;
         text-decoration: none;
-        transition: transform 0.1s active;
         cursor: pointer;
         border: none;
-        -webkit-tap-highlight-color: transparent;
+        font-variant: small-caps; /* Smallcaps for Buttons */
     }
 
     #start-game-btn {
@@ -86,33 +83,34 @@
         border: 2px solid #e2e8f0;
     }
 
-    /* --- GAMEPLAY OPTIMIZATION --- */
+    /* --- SPRITE OPTIMIZATION --- */
     .option-btn {
         display: flex;
-        flex-direction: row; /* Horizontal layout is better for list scrolling on mobile */
+        flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-        gap: 20px;
-        padding: 12px 20px;
+        gap: 15px;
+        padding: 8px 20px;
         border: 2px solid #f1f5f9;
         border-radius: 20px;
         background: white;
         width: 100%;
         margin-bottom: 8px;
         cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
+        transition: 0.2s;
     }
 
     .option-btn img {
-        width: 50px;
-        height: 50px;
+        width: 60px; /* Sprites look better at this size */
+        height: 60px;
+        image-rendering: pixelated; /* Keeps sprites sharp */
     }
 
     .option-btn span {
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 700;
-        text-transform: capitalize;
         color: #334155;
+        font-variant: small-caps; /* Smallcaps for Pokemon Names */
     }
 
     .lore-box {
@@ -123,9 +121,8 @@
         font-size: 15px;
         line-height: 1.5;
         text-align: left;
-        max-height: 180px;
-        overflow-y: auto;
         margin-bottom: 15px;
+        font-variant: small-caps; /* Smallcaps for Lore Text */
     }
 
     #overlay {
@@ -138,7 +135,6 @@
         justify-content: center;
         z-index: 100;
         padding: 20px;
-        box-sizing: border-box;
         border-radius: 32px;
     }
 </style>
@@ -148,36 +144,32 @@
 <div id="main-menu" class="menu-card">
     <div style="font-size: 50px; margin-bottom: 10px;">📕</div>
     <h1 class="menu-title">Lore Master</h1>
-    <p style="font-size: 15px; color: #64748b; margin-bottom: 5px;">Who's that Pokémon?</p>
+    <p style="font-size: 15px; color: #64748b; margin-bottom: 5px; font-variant: small-caps;">Identify the subject.</p>
     
     <div class="btn-group">
-        <button id="start-game-btn" class="menu-btn" onclick="initStatsGame()">
-            PLAY GAME
-        </button>
-        <a href="https://xoelpr03.github.io/dexv1.1/" class="menu-btn exit-link-btn">
-            EXIT TO DEX
-        </a>
+        <button id="start-game-btn" class="menu-btn" onclick="initStatsGame()">Begin Mission</button>
+        <a href="https://xoelpr03.github.io/dexv1.1/" class="menu-btn exit-link-btn">Return to Dex</a>
     </div>
 
-    <div style="margin-top: 30px; font-size: 12px; font-weight: 800; color: #94a3b8;">
-        RECORD: <span id="menu-best-score" style="color: #10b981;">0</span>
+    <div style="margin-top: 30px; font-size: 12px; font-weight: 800; color: #94a3b8; font-variant: small-caps;">
+        Record Streak: <span id="menu-best-score" style="color: #10b981;">0</span>
     </div>
 </div>
 
 <div id="game-container" style="display: none; width: 100%; max-width: 400px;">
     <div class="menu-card" style="padding: 20px;">
         <div id="overlay">
-            <h2 style="color: #ef4444; font-weight: 900; margin-bottom: 0;">GAME OVER</h2>
-            <p id="death-reason" style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;"></p>
-            <img id="correct-img" src="" style="width: 140px; height: 140px; object-fit: contain;">
-            <p style="font-size: 18px; font-weight: 800; margin-bottom: 25px;">It was <span id="correct-name" style="color: #3b82f6;"></span></p>
-            <button class="menu-btn" style="background: var(--primary); color: white;" onclick="initStatsGame()">RETRY</button>
-            <button onclick="stopGame()" style="margin-top: 20px; background: none; border: none; color: #94a3b8; font-size: 13px; font-weight: 700; text-decoration: underline;">MAIN MENU</button>
+            <h2 style="color: #ef4444; font-weight: 900; font-variant: small-caps;">Mission Failed</h2>
+            <p id="death-reason" style="font-size: 12px; color: #94a3b8; margin-bottom: 15px; font-variant: small-caps;"></p>
+            <img id="correct-img" src="" style="width: 100px; height: 100px; image-rendering: pixelated;">
+            <p style="font-size: 18px; font-weight: 800; margin-bottom: 25px; font-variant: small-caps;">Subject: <span id="correct-name" style="color: #3b82f6;"></span></p>
+            <button class="menu-btn" style="background: var(--primary); color: white;" onclick="initStatsGame()">Retry</button>
+            <button onclick="stopGame()" style="margin-top: 20px; background: none; border: none; color: #94a3b8; font-size: 13px; font-weight: 700; text-decoration: underline; font-variant: small-caps;">Abort</button>
         </div>
 
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; font-weight: 800;">
-            <div style="color: #ef4444;">STREAK: <span id="current-score">0</span></div>
-            <div style="color: #10b981;">BEST: <span id="best-score">0</span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; font-weight: 800; font-variant: small-caps;">
+            <div style="color: #ef4444;">Streak: <span id="current-score">0</span></div>
+            <div style="color: #10b981;">Best: <span id="best-score">0</span></div>
         </div>
 
         <div id="game-stats"></div>
@@ -204,7 +196,7 @@
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('game-container').style.display = 'block';
         
-        statsDiv.innerHTML = "<div style='padding:40px; color:#94a3b8; font-weight:700;'>Finding Pokémon...</div>";
+        statsDiv.innerHTML = "<div style='padding:40px; color:#94a3b8; font-weight:700; font-variant: small-caps;'>Analyzing...</div>";
         optionsDiv.innerHTML = ""; 
 
         try {
@@ -237,8 +229,9 @@
             choices.forEach(p => {
                 const b = document.createElement('button');
                 b.className = 'option-btn';
-                const img = p.sprites.other['official-artwork'].front_default || p.sprites.front_default;
-                b.innerHTML = `<img src="${img}"><span>${p.name.replace(/-/g,' ')}</span>`;
+                // Switch to default sprite for that classic look
+                const sprite = p.sprites.front_default; 
+                b.innerHTML = `<img src="${sprite}"><span>${p.name.replace(/-/g,' ')}</span>`;
                 b.onclick = () => {
                     if(p.id === targetPoke.id) {
                         b.style.borderColor = "#22c55e"; b.style.background = "#f0fdf4";
@@ -252,13 +245,13 @@
                 };
                 optionsDiv.appendChild(b);
             });
-        } catch(e) { statsDiv.innerHTML = "Error. Please check connection."; }
+        } catch(e) { statsDiv.innerHTML = "Error."; }
     }
 
     function showGameOver() {
-        document.getElementById('death-reason').innerText = `Did you know? All 4 were ${currentType.toUpperCase()} type!`;
+        document.getElementById('death-reason').innerText = `They were all ${currentType.toUpperCase()} type`;
         document.getElementById('correct-name').innerText = targetPoke.name.replace(/-/g, ' ');
-        document.getElementById('correct-img').src = targetPoke.sprites.other['official-artwork'].front_default || targetPoke.sprites.front_default;
+        document.getElementById('correct-img').src = targetPoke.sprites.front_default;
         document.getElementById('overlay').style.display = 'flex';
         currentScore = 0; updateScoreUI();
     }
@@ -269,6 +262,5 @@
     }
     updateScoreUI();
 </script>
-
 </body>
 </html>
